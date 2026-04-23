@@ -55,40 +55,27 @@ def build_ovpn(name: str) -> str:
     port = os.environ.get("VPN_PORT", "1194")
     proto = os.environ.get("VPN_PROTO", "udp")
 
-    ca = (PKI_DIR / "ca.crt").read_text()
-    cert = (PKI_DIR / "issued" / f"{name}.crt").read_text()
-    key = (PKI_DIR / "private" / f"{name}.key").read_text()
+    ca = (PKI_DIR / "ca.crt").read_text().strip()
+    cert = (PKI_DIR / "issued" / f"{name}.crt").read_text().strip()
+    key = (PKI_DIR / "private" / f"{name}.key").read_text().strip()
 
-    ovpn = f"""client
-dev tun
-proto {proto}
-remote {host} {port}
-resolv-retry infinite
-nobind
-persist-key
-persist-tun
-remote-cert-tls server
-cipher AES-256-GCM
-verb 3
-<ca>
-{ca.strip()}
-</ca>
-<cert>
-{cert.strip()}
-</cert>
-<key>
-{key.strip()}
-</key>
-"""
+    template_path = CONFIG_DIR / "client.ovpn.template"
+    template = template_path.read_text()
+
+    ovpn = (template
+        .replace("{{proto}}", proto)
+        .replace("{{host}}", host)
+        .replace("{{port}}", port)
+        .replace("{{ca}}", ca)
+        .replace("{{cert}}", cert)
+        .replace("{{key}}", key)
+    )
 
     # Include tls-crypt key if available
     tc_key_path = PKI_DIR / "tc.key"
     if tc_key_path.exists():
-        tc_key = tc_key_path.read_text()
-        ovpn += f"""<tls-crypt>
-{tc_key.strip()}
-</tls-crypt>
-"""
+        tc_key = tc_key_path.read_text().strip()
+        ovpn += f"<tls-crypt>\n{tc_key}\n</tls-crypt>\n"
 
     return ovpn
 

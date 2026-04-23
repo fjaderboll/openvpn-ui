@@ -48,6 +48,13 @@ if [ ! -f "$CONFIG_DIR/server.conf" ]; then
     echo ">>> server.conf copied. Edit $CONFIG_DIR/server.conf to customize."
 fi
 
+# Copy default client template if not exists
+if [ ! -f "$CONFIG_DIR/client.ovpn.template" ]; then
+    echo ">>> Copying default client.ovpn.template..."
+    cp /app/config/client.ovpn.template "$CONFIG_DIR/client.ovpn.template"
+    echo ">>> client.ovpn.template copied. Edit $CONFIG_DIR/client.ovpn.template to customize."
+fi
+
 # Enable IP forwarding (may fail if /proc/sys is read-only; use --sysctl at docker run)
 sysctl -w net.ipv4.ip_forward=1 2>/dev/null || echo ">>> ip_forward already enabled or read-only (ensure --sysctl net.ipv4.ip_forward=1 is set)"
 

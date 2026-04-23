@@ -1,0 +1,20 @@
+client
+dev tun
+proto {{proto}}
+remote {{host}} {{port}}
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+remote-cert-tls server
+cipher AES-256-GCM
+verb 3
+<ca>
+{{ca}}
+</ca>
+<cert>
+{{cert}}
+</cert>
+<key>
+{{key}}
+</key>
