@@ -1,6 +1,8 @@
 # OpenVPN UI
 
-A self-contained Docker image running OpenVPN with a web-based admin panel for managing clients.
+A self-contained Docker image running OpenVPN with a web-based admin UI for managing clients.
+
+![screenshot](doc/screenshot-clients.png)
 
 ## Features
 
@@ -26,19 +28,18 @@ docker run -d \
   -v openvpn-data:/data \
   -e ADMIN_PASSWORD=changeme \
   -e VPN_HOST=your.public.ip.or.hostname \
-  ghcr.io/YOUR_USERNAME/openvpn-ui:latest
+  ghcr.io/fjaderboll/openvpn-ui:latest
 ```
 
 Then open `http://localhost:8080` and log in with `admin` / `changeme`.
 
-> **First startup** takes a few minutes while DH parameters are generated.
-
 ## Environment Variables
+These variables can be passed when you start the container:
 
-| Variable | Default | Description |
+| Variable | Default value | Description |
 |---|---|---|
 | `ADMIN_USERNAME` | `admin` | Admin login username |
-| `ADMIN_PASSWORD` | *(required)* | Admin login password |
+| `ADMIN_PASSWORD` | `changeme` | Admin login password |
 | `VPN_HOST` | `vpn.example.com` | Public hostname/IP for client configs |
 | `VPN_PORT` | `1194` | OpenVPN listen port |
 | `VPN_PROTO` | `udp` | OpenVPN protocol (`udp` or `tcp`) |
@@ -83,7 +84,3 @@ docker run -it \
   -e VPN_HOST=localhost \
   openvpn-ui
 ```
-
-## CI/CD
-
-The GitHub Actions workflow builds and pushes the Docker image to GitHub Container Registry on every push to `main` or tagged release.

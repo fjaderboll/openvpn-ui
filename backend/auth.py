@@ -15,7 +15,7 @@ security = HTTPBearer()
 SECRET_KEY = secrets.token_hex(32)
 
 ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "changeme")
 
 
 def create_token(username: str) -> str:
