@@ -1,0 +1,12 @@
+__pycache__
+*.pyc
+*.pyo
+.git
+.github
+.gitignore
+ai-setup.txt
+README.md
+*.md
+.vscode
+.idea
+/temp
