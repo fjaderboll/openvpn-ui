@@ -45,7 +45,6 @@ These variables can be passed when you start the container:
 | `VPN_PROTO` | `udp` | OpenVPN protocol (`udp` or `tcp`) |
 | `VPN_SUBNET` | `10.8.0.0` | VPN subnet |
 | `VPN_SUBNET_MASK` | `255.255.255.0` | VPN subnet mask |
-| `DNS_SERVERS` | `8.8.8.8,8.8.4.4` | DNS servers pushed to clients |
 
 ## Required Docker Permissions
 

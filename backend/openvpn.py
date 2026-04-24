@@ -58,6 +58,7 @@ def build_ovpn(name: str) -> str:
     ca = (PKI_DIR / "ca.crt").read_text().strip()
     cert = (PKI_DIR / "issued" / f"{name}.crt").read_text().strip()
     key = (PKI_DIR / "private" / f"{name}.key").read_text().strip()
+    tc_key = (PKI_DIR / "tc.key").read_text().strip()
 
     template_path = CONFIG_DIR / "client.ovpn.template"
     template = template_path.read_text()
@@ -69,13 +70,8 @@ def build_ovpn(name: str) -> str:
         .replace("{{ca}}", ca)
         .replace("{{cert}}", cert)
         .replace("{{key}}", key)
+        .replace("{{tc}}", tc_key)
     )
-
-    # Include tls-crypt key if available
-    tc_key_path = PKI_DIR / "tc.key"
-    if tc_key_path.exists():
-        tc_key = tc_key_path.read_text().strip()
-        ovpn += f"<tls-crypt>\n{tc_key}\n</tls-crypt>\n"
 
     return ovpn
 
