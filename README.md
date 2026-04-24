@@ -25,7 +25,7 @@ docker run -d \
   --device /dev/net/tun \
   -p 1194:1194/udp \
   -p 1180:80 \
-  -v openvpn-data:/data \
+  -v openvpn-ui-data:/data \
   -e ADMIN_PASSWORD=changeme \
   -e VPN_HOST=your.public.ip.or.hostname \
   ghcr.io/fjaderboll/openvpn-ui:latest
@@ -68,19 +68,26 @@ All configuration and state is stored in `/data`:
 └── ip_assignments.json
 ```
 
+To clean all settings:
+```shell
+docker rm -f openvpn-ui
+docker volume rm openvpn-ui-data
+```
+
 ## Building Locally
 
 ```bash
 docker build -t openvpn-ui .
 
 docker run -it \
+  --rm \
   --name openvpn-ui \
   --cap-add=NET_ADMIN \
   --sysctl net.ipv4.ip_forward=1 \
   --device /dev/net/tun \
   -p 1194:1194/udp \
   -p 1180:80 \
-  -v openvpn-data:/data \
+  -v openvpn-ui-data:/data \
   -e ADMIN_PASSWORD=changeme \
   -e VPN_HOST=localhost \
   openvpn-ui

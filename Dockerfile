@@ -2,17 +2,21 @@ FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     openvpn \
     easy-rsa \
     python3 \
     python3-pip \
     supervisor \
     iptables \
+    # debugging tools
     nano \
     vim \
     iputils-ping \
+    curl \
+    ca-certificates \
     openssh-client \
+    && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Create app directory
@@ -25,6 +29,11 @@ RUN pip3 install --no-cache-dir --break-system-packages -r /app/backend/requirem
 # Copy application
 COPY backend/ /app/backend/
 COPY frontend/ /app/frontend/
+
+# Download frontend vendor dependencies locally (to avoid CDN reliance at runtime)
+ARG ALPINE_JS_VERSION=3.15.11
+ADD https://cdn.jsdelivr.net/npm/alpinejs@${ALPINE_JS_VERSION}/dist/cdn.min.js /app/frontend/vendor/alpine.min.js
+ADD https://cdn.tailwindcss.com /app/frontend/vendor/tailwind.js
 COPY scripts/ /app/scripts/
 COPY config/ /app/config/
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf

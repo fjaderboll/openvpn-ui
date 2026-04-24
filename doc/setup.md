@@ -1,8 +1,8 @@
 # Setup
 
-## Home network setup
+## Home Network
 For routing purposes inside your local network, it might be easier to run with `--net=host`.
-And without the port specification you need to specify variable `UI_PORT` (if you don't want to run on port 80).
+And without the port specification you need to specify variable `UI_PORT` (if you don't want to run on port 80). OpenVPN still runs at port `1194` (as specified in `server.conf`).
 
 ```bash
 docker run -d \
@@ -11,7 +11,7 @@ docker run -d \
   --device /dev/net/tun \
   --net=host \
   -e UI_PORT=1180 \
-  -v openvpn-data:/data \
+  -v openvpn-ui-data:/data \
   -e ADMIN_USERNAME=john \
   -e ADMIN_PASSWORD=verysecret \
   -e VPN_HOST=your.public.ip.or.hostname \
@@ -24,7 +24,7 @@ On your local computer run this:
 sudo ip route add 10.8.0.0/24 via ip.of.server.running.the.container
 ```
 
-or even better, add a static route in your router:
+But a better solution is to add a static route in your router:
 * Destination: `10.8.0.0/24`
 * Gateway: `ip.of.server.running.the.container`
 
