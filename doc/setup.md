@@ -8,7 +8,6 @@ And without the port specification you need to specify variable `UI_PORT` (if yo
 docker run -d \
   --name openvpn-ui \
   --cap-add=NET_ADMIN \
-  --sysctl net.ipv4.ip_forward=1 \
   --device /dev/net/tun \
   --net=host \
   -e UI_PORT=1180 \

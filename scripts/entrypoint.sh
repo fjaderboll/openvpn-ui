@@ -62,6 +62,12 @@ sysctl -w net.ipv4.ip_forward=1 2>/dev/null || echo ">>> ip_forward already enab
 iptables -t nat -C POSTROUTING -s "${VPN_SUBNET}/24" -j MASQUERADE 2>/dev/null || \
     iptables -t nat -A POSTROUTING -s "${VPN_SUBNET}/24" -j MASQUERADE
 
+# Allow forwarding to/from the VPN subnet (needed for LAN-to-VPN routing)
+iptables -C FORWARD -i tun0 -j ACCEPT 2>/dev/null || \
+    iptables -A FORWARD -i tun0 -j ACCEPT
+iptables -C FORWARD -o tun0 -j ACCEPT 2>/dev/null || \
+    iptables -A FORWARD -o tun0 -j ACCEPT
+
 # Allow replies to server-initiated connections
 iptables -C INPUT -i tun0 -m state --state ESTABLISHED,RELATED -j ACCEPT 2>/dev/null || \
     iptables -A INPUT -i tun0 -m state --state ESTABLISHED,RELATED -j ACCEPT
