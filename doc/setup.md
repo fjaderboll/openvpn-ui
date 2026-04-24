@@ -12,7 +12,8 @@ docker run -d \
   --net=host \
   -e UI_PORT=1180 \
   -v openvpn-data:/data \
-  -e ADMIN_PASSWORD=changeme \
+  -e ADMIN_USERNAME=john \
+  -e ADMIN_PASSWORD=verysecret \
   -e VPN_HOST=your.public.ip.or.hostname \
   ghcr.io/fjaderboll/openvpn-ui:latest
 ```
