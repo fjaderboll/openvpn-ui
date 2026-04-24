@@ -62,5 +62,15 @@ sysctl -w net.ipv4.ip_forward=1 2>/dev/null || echo ">>> ip_forward already enab
 iptables -t nat -C POSTROUTING -s "${VPN_SUBNET}/24" -j MASQUERADE 2>/dev/null || \
     iptables -t nat -A POSTROUTING -s "${VPN_SUBNET}/24" -j MASQUERADE
 
+# Allow replies to server-initiated connections
+iptables -C INPUT -i tun0 -m state --state ESTABLISHED,RELATED -j ACCEPT 2>/dev/null || \
+    iptables -A INPUT -i tun0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+# Allow ICMP (ping) from clients so they can verify connectivity
+iptables -C INPUT -i tun0 -p icmp -j ACCEPT 2>/dev/null || \
+    iptables -A INPUT -i tun0 -p icmp -j ACCEPT
+# Drop all new/client-initiated traffic to the server over the tunnel
+iptables -C INPUT -i tun0 -m state --state NEW -j DROP 2>/dev/null || \
+    iptables -A INPUT -i tun0 -m state --state NEW -j DROP
+
 echo "=== Starting services ==="
 exec supervisord -n -c /etc/supervisor/conf.d/supervisord.conf

@@ -7,9 +7,12 @@ RUN apt-get update && apt-get install -y \
     easy-rsa \
     python3 \
     python3-pip \
-    python3-venv \
     supervisor \
     iptables \
+    nano \
+    vim \
+    iputils-ping \
+    openssh-client \
     && rm -rf /var/lib/apt/lists/*
 
 # Create app directory
