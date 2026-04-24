@@ -37,6 +37,8 @@ RUN mkdir -p /var/log/supervisor
 
 VOLUME /data
 
+ENV UI_PORT=80
+
 EXPOSE 1194/udp
 EXPOSE 80
 

@@ -1,6 +1,6 @@
 # OpenVPN UI
 
-A self-contained Docker image running OpenVPN with a web-based admin UI for managing clients.
+A self-contained Docker image running a OpenVPN server with a web-based admin UI for managing clients.
 
 ![screenshot](doc/screenshot-clients.png)
 
@@ -24,27 +24,29 @@ docker run -d \
   --sysctl net.ipv4.ip_forward=1 \
   --device /dev/net/tun \
   -p 1194:1194/udp \
-  -p 8080:80 \
+  -p 1180:80 \
   -v openvpn-data:/data \
   -e ADMIN_PASSWORD=changeme \
   -e VPN_HOST=your.public.ip.or.hostname \
   ghcr.io/fjaderboll/openvpn-ui:latest
 ```
 
-Then open `http://localhost:8080` and log in with `admin` / `changeme`.
+Then open `http://localhost:1180` and log in with `admin` / `changeme`.
+
+See [setup.md](doc/setup.md) for more ways to setup this up including routing.
 
 ## Environment Variables
 These variables can be passed when you start the container:
 
-| Variable | Default value | Description |
-|---|---|---|
-| `ADMIN_USERNAME` | `admin` | Admin login username |
-| `ADMIN_PASSWORD` | `changeme` | Admin login password |
-| `VPN_HOST` | `vpn.example.com` | Public hostname/IP for client configs |
-| `VPN_PORT` | `1194` | OpenVPN listen port |
-| `VPN_PROTO` | `udp` | OpenVPN protocol (`udp` or `tcp`) |
-| `VPN_SUBNET` | `10.8.0.0` | VPN subnet |
-| `VPN_SUBNET_MASK` | `255.255.255.0` | VPN subnet mask |
+| Variable          | Default value     | Description                           |
+| ----------------- | ----------------- | ------------------------------------- |
+| `ADMIN_USERNAME`  | `admin`           | Admin login username                  |
+| `ADMIN_PASSWORD`  | `changeme`        | Admin login password                  |
+| `VPN_HOST`        | `vpn.example.com` | Public hostname/IP for client configs |
+| `VPN_PORT`        | `1194`            | OpenVPN listen port                   |
+| `VPN_PROTO`       | `udp`             | OpenVPN protocol (`udp` or `tcp`)     |
+| `VPN_SUBNET`      | `10.8.0.0`        | VPN subnet                            |
+| `VPN_SUBNET_MASK` | `255.255.255.0`   | VPN subnet mask                       |
 
 ## Required Docker Permissions
 
@@ -56,7 +58,7 @@ These variables can be passed when you start the container:
 
 All configuration and state is stored in `/data`:
 
-```
+```shell
 /data/
 ├── pki/            # Easy-RSA PKI (CA, certs, keys)
 ├── ccd/            # Client-config-dir (persistent IPs)
@@ -77,7 +79,7 @@ docker run -it \
   --sysctl net.ipv4.ip_forward=1 \
   --device /dev/net/tun \
   -p 1194:1194/udp \
-  -p 8080:80 \
+  -p 1180:80 \
   -v openvpn-data:/data \
   -e ADMIN_PASSWORD=changeme \
   -e VPN_HOST=localhost \
