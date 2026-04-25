@@ -99,5 +99,5 @@ docker run -it \
   openvpn-ui
 
 # head to http://localhost:1180 and create a client and test it
-openvpn --config client.ovpn
+openvpn --config client.conf
 ```

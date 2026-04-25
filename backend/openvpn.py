@@ -60,7 +60,7 @@ def build_ovpn(name: str) -> str:
     key = (PKI_DIR / "private" / f"{name}.key").read_text().strip()
     tc_key = (PKI_DIR / "tc.key").read_text().strip()
 
-    template_path = CONFIG_DIR / "client.ovpn.template"
+    template_path = CONFIG_DIR / "client.conf.template"
     template = template_path.read_text()
 
     ovpn = (template

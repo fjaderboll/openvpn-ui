@@ -58,10 +58,10 @@ if [ ! -f "$CONFIG_DIR/server.conf" ]; then
 fi
 
 # Copy default client template if not exists
-if [ ! -f "$CONFIG_DIR/client.ovpn.template" ]; then
-    echo ">>> Copying default client.ovpn.template..."
-    cp /app/config/client.ovpn.template "$CONFIG_DIR/client.ovpn.template"
-    echo ">>> client.ovpn.template copied. Edit $CONFIG_DIR/client.ovpn.template to customize."
+if [ ! -f "$CONFIG_DIR/client.conf.template" ]; then
+    echo ">>> Copying default client.conf.template..."
+    cp /app/config/client.conf.template "$CONFIG_DIR/client.conf.template"
+    echo ">>> client.conf.template copied. Edit $CONFIG_DIR/client.conf.template to customize."
 fi
 
 # Enable IP forwarding (may fail if /proc/sys is read-only; use --sysctl at docker run)
