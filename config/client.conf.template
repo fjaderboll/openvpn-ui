@@ -1,7 +1,7 @@
 client
 remote {{host}} {{port}}
 proto {{proto}}
-dev tun
+dev tun-ovpn-ui
 resolv-retry infinite
 nobind
 persist-key
