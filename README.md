@@ -48,9 +48,10 @@ These variables can be passed when you start the container:
 | `VPN_SUBNET`      | `10.8.0.0`         | VPN subnet                            |
 | `VPN_SUBNET_MASK` | `255.255.255.0`    | VPN subnet mask                       |
 
-Some of these will be persisted in your volume, so if running a second time with
-other values, you may need to clear the volume or manually update `/data/config/server.conf`
-inside the container.
+> [!NOTE]
+> Some of these will be persisted in your volume, so if running a second time with
+> other values, you may need to clear the volume or manually update `/data/config/server.conf`
+> inside the container.
 
 ## Required Docker Permissions
 
@@ -66,7 +67,7 @@ All configuration and state is stored in `/data`:
 /data/
 ├── pki/            # Easy-RSA PKI (CA, certs, keys)
 ├── ccd/            # Client-config-dir (persistent IPs)
-├── config/         # server.conf
+├── config/         # server.conf + client.conf.template
 ├── clients/        # Generated .ovpn files
 ├── logs/           # OpenVPN logs and status
 └── ip_assignments.json
