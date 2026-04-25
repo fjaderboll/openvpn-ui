@@ -42,11 +42,19 @@ if [ ! -d "$PKI_DIR" ]; then
     echo ">>> PKI initialization complete."
 fi
 
-# Copy default server.conf if not exists
+# Generate server.conf from template if not exists
 if [ ! -f "$CONFIG_DIR/server.conf" ]; then
-    echo ">>> Copying default server.conf..."
-    cp /app/config/server.conf "$CONFIG_DIR/server.conf"
-    echo ">>> server.conf copied. Edit $CONFIG_DIR/server.conf to customize."
+    echo ">>> Generating server.conf from template..."
+    VPN_PORT="${VPN_PORT:-1194}"
+    VPN_PROTO="${VPN_PROTO:-udp}"
+    VPN_SUBNET_MASK="${VPN_SUBNET_MASK:-255.255.255.0}"
+    
+    sed -e "s|{{port}}|$VPN_PORT|g" \
+        -e "s|{{proto}}|$VPN_PROTO|g" \
+        -e "s|{{subnet}}|$VPN_SUBNET|g" \
+        -e "s|{{subnet_mask}}|$VPN_SUBNET_MASK|g" \
+        /app/config/server.conf.template > "$CONFIG_DIR/server.conf"
+    echo ">>> server.conf generated from template with VPN_SUBNET=$VPN_SUBNET, VPN_PORT=$VPN_PORT, VPN_PROTO=$VPN_PROTO"
 fi
 
 # Copy default client template if not exists

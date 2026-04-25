@@ -1,9 +1,9 @@
-port 1194
-proto udp
+port {{port}}
+proto {{proto}}
 dev tun-ovpn-ui
 dev-type tun
 
-server 10.8.0.0 255.255.255.0
+server {{subnet}} {{subnet_mask}}
 topology subnet
 max-clients 255
 keepalive 15 120

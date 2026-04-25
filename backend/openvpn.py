@@ -51,7 +51,7 @@ def create_ccd_file(client_name: str, ip: str):
 
 
 def build_ovpn(name: str) -> str:
-    host = os.environ.get("VPN_HOST", "vpn.example.com")
+    host = os.environ.get("VPN_HOST", "vpn.mydomain.com")
     port = os.environ.get("VPN_PORT", "1194")
     proto = os.environ.get("VPN_PROTO", "udp")
 

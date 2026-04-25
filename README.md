@@ -17,7 +17,7 @@ A self-contained Docker image running a OpenVPN server with a web-based admin UI
 
 ## Quick Start
 
-```bash
+```shell
 docker run -d \
   --name openvpn-ui \
   --cap-add=NET_ADMIN \
@@ -38,15 +38,19 @@ See [setup.md](doc/setup.md) for more ways to setup this up including routing.
 ## Environment Variables
 These variables can be passed when you start the container:
 
-| Variable          | Default value     | Description                           |
-| ----------------- | ----------------- | ------------------------------------- |
-| `ADMIN_USERNAME`  | `admin`           | Admin login username                  |
-| `ADMIN_PASSWORD`  | `changeme`        | Admin login password                  |
-| `VPN_HOST`        | `vpn.example.com` | Public hostname/IP for client configs |
-| `VPN_PORT`        | `1194`            | OpenVPN listen port                   |
-| `VPN_PROTO`       | `udp`             | OpenVPN protocol (`udp` or `tcp`)     |
-| `VPN_SUBNET`      | `10.8.0.0`        | VPN subnet                            |
-| `VPN_SUBNET_MASK` | `255.255.255.0`   | VPN subnet mask                       |
+| Variable          | Default value      | Description                           |
+| ----------------- | ------------------ | ------------------------------------- |
+| `ADMIN_USERNAME`  | `admin`            | Admin login username                  |
+| `ADMIN_PASSWORD`  | `changeme`         | Admin login password                  |
+| `VPN_HOST`        | `vpn.mydomain.com` | Public hostname/IP for client configs |
+| `VPN_PORT`        | `1194`             | OpenVPN listen port                   |
+| `VPN_PROTO`       | `udp`              | OpenVPN protocol (`udp` or `tcp`)     |
+| `VPN_SUBNET`      | `10.8.0.0`         | VPN subnet                            |
+| `VPN_SUBNET_MASK` | `255.255.255.0`    | VPN subnet mask                       |
+
+Some of these will be persisted in your volume, so if running a second time with
+other values, you may need to clear the volume or manually update `/data/config/server.conf`
+inside the container.
 
 ## Required Docker Permissions
 
@@ -74,11 +78,13 @@ docker rm -f openvpn-ui
 docker volume rm openvpn-ui-data
 ```
 
-## Building Locally
+## Local building and testing
 
-```bash
+```shell
+# build
 docker build -t openvpn-ui .
 
+# run server
 docker run -it \
   --rm \
   --name openvpn-ui \
@@ -91,4 +97,7 @@ docker run -it \
   -e ADMIN_PASSWORD=changeme \
   -e VPN_HOST=localhost \
   openvpn-ui
+
+# head to http://localhost:1180 and create a client and test it
+openvpn --config client.ovpn
 ```
