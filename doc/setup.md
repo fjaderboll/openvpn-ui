@@ -6,6 +6,7 @@ For routing purposes inside your local network, it might be easier to run with `
 ```shell
 docker run -d \
   --name openvpn-ui \
+  --restart unless-stopped \
   --cap-add=NET_ADMIN \
   --device /dev/net/tun \
   --net=host \

@@ -20,6 +20,7 @@ A self-contained Docker image running a OpenVPN server with a web-based admin UI
 ```shell
 docker run -d \
   --name openvpn-ui \
+  --restart unless-stopped \
   --cap-add=NET_ADMIN \
   --sysctl net.ipv4.ip_forward=1 \
   --device /dev/net/tun \
