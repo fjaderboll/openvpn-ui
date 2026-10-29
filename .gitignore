@@ -2,3 +2,4 @@
 /*.conf
 /*.conf.template
 /*.sh
+__pycache__/

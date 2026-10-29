@@ -30,17 +30,18 @@ if [ ! -d "$PKI_DIR" ]; then
     echo ">>> Generating DH parameters (this may take a while)..."
     /usr/share/easy-rsa/easyrsa --pki-dir="$PKI_DIR" gen-dh
 
-    echo ">>> Generating CRL..."
-    EASYRSA_BATCH=1 /usr/share/easy-rsa/easyrsa --pki-dir="$PKI_DIR" gen-crl
-
     echo ">>> Generating TLS-crypt key..."
     openvpn --genkey secret "$PKI_DIR/tc.key"
 
-    # Make CRL readable by OpenVPN
-    chmod 644 "$PKI_DIR/crl.pem"
-
     echo ">>> PKI initialization complete."
 fi
+
+# Regenerate CRL on every start, OpenVPN rejects all clients once it has expired
+echo ">>> Generating CRL..."
+EASYRSA_BATCH=1 /usr/share/easy-rsa/easyrsa --pki-dir="$PKI_DIR" gen-crl
+
+# Make CRL readable by OpenVPN
+chmod 644 "$PKI_DIR/crl.pem"
 
 # Generate server.conf from template if not exists
 if [ ! -f "$CONFIG_DIR/server.conf" ]; then

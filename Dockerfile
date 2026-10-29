@@ -47,6 +47,8 @@ RUN mkdir -p /var/log/supervisor
 VOLUME /data
 
 ENV UI_PORT=80
+# Easy-RSA defaults to 180 days, after which OpenVPN rejects all clients
+ENV EASYRSA_CRL_DAYS=3650
 
 EXPOSE 1194/udp
 EXPOSE 80

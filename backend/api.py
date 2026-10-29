@@ -1,5 +1,4 @@
 import io
-import os
 import zipfile
 from datetime import datetime
 
@@ -118,10 +117,8 @@ async def restore_backup(
     except zipfile.BadZipFile:
         raise HTTPException(status_code=400, detail="Invalid zip file")
 
-    # Fix CRL permissions
-    crl_path = openvpn.PKI_DIR / "crl.pem"
-    if crl_path.exists():
-        os.chmod(crl_path, 0o644)
+    # The backup may contain an old, possibly expired, CRL
+    openvpn.regenerate_crl()
 
     openvpn.restart_openvpn()
     return {"status": "restored"}

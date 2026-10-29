@@ -99,6 +99,23 @@ def generate_client(name: str) -> str:
     return ovpn
 
 
+def regenerate_crl():
+    """Regenerate the CRL. OpenVPN rejects all clients once it has expired."""
+    env = os.environ.copy()
+    env["EASYRSA_BATCH"] = "1"
+    result = subprocess.run(
+        [EASYRSA, f"--pki-dir={PKI_DIR}", "gen-crl"],
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"Failed to regenerate CRL: {result.stderr}")
+
+    # Make CRL readable by OpenVPN
+    os.chmod(PKI_DIR / "crl.pem", 0o644)
+
+
 def revoke_client(name: str):
     """Revoke a client certificate and clean up files."""
     env = os.environ.copy()
@@ -113,19 +130,7 @@ def revoke_client(name: str):
     if result.returncode != 0:
         raise RuntimeError(f"Failed to revoke client: {result.stderr}")
 
-    result = subprocess.run(
-        [EASYRSA, f"--pki-dir={PKI_DIR}", "gen-crl"],
-        env=env,
-        capture_output=True,
-        text=True,
-    )
-    if result.returncode != 0:
-        raise RuntimeError(f"Failed to regenerate CRL: {result.stderr}")
-
-    # Make CRL readable by OpenVPN
-    crl_path = PKI_DIR / "crl.pem"
-    if crl_path.exists():
-        os.chmod(crl_path, 0o644)
+    regenerate_crl()
 
     # Remove client files
     ovpn_file = CLIENTS_DIR / f"{name}.ovpn"
